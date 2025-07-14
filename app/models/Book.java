@@ -1,6 +1,3 @@
-import io.ebean.Finder;
-import io.ebean.annotation.EnumValue;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -9,11 +6,8 @@ import javax.validation.constraints.NotNull;
 public class Book extends BaseEntity {
 
     public enum BookStatus {
-        @EnumValue("PENDING")
         PENDING,
-        @EnumValue("REJECTED")
         REJECTED,
-        @EnumValue("APPROVED")
         APPROVED
     }
 
@@ -37,9 +31,6 @@ public class Book extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private BookStatus status;
-
-    // Ebean finder
-    public static final Finder<Long, Book> find = new Finder<>(Book.class);
 
     // Default constructor
     public Book() {}
