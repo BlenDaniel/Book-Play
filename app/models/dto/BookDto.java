@@ -1,4 +1,9 @@
+
+package models.dto;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import models.Book;
+
 import java.time.Instant;
 
 public class BookDto {
