@@ -1,0 +1,66 @@
+/* BookForm.module.css */
+.container {
+  padding: 0;
+}
+
+.form {
+  max-width: 400px;
+  margin-top: 1rem;
+  background: #fff;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #555;
+}
+
+.formGroup input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.formGroup input:focus {
+  outline: 2px solid #007acc;
+  outline-offset: 2px;
+  border-color: #007acc;
+}
+
+.errorInput {
+  border-color: #d73a49 !important;
+}
+
+.errorText {
+  color: #d73a49;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.submitButton {
+  background-color: #007acc;
+  color: white;
+  border: 1px solid #007acc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.submitButton:hover {
+  background-color: #005f9a;
+}
