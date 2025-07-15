@@ -13,6 +13,9 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "2.2.224",
   "org.hibernate" % "hibernate-core" % "6.4.4.Final",
   "org.hibernate.validator" % "hibernate-validator" % "8.0.1.Final",
+  "jakarta.persistence" % "jakarta.persistence-api" % "3.1.0",
+  "javax.persistence" % "javax.persistence-api" % "2.2",
+  "jakarta.validation" % "jakarta.validation-api" % "3.0.2",
   "javax.validation" % "validation-api" % "2.0.1.Final",
   "org.playframework" %% "play-test" % "3.0.8" % Test,
   "org.assertj" % "assertj-core" % "3.24.2" % Test

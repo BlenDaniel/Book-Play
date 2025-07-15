@@ -6,7 +6,7 @@
 GET     /                           controllers.HomeController.index()
 
 # Book API endpoints
-GET     /api/books                  controllers.BookController.getAll(request: Request)
+GET     /api/books                  controllers.BookController.getAll()
 POST    /api/books                  controllers.BookController.create(request: Request)
 GET     /api/books/search           controllers.BookController.search(request: Request)
 GET     /api/books/:id              controllers.BookController.getOne(id: String)
