@@ -1,4 +1,4 @@
-# Book Management System - Code Challenge
+# Book Management System
 
 A full-stack web application for managing a collection of books. The system provides functionality to create, read, update, delete, and search books in an inventory. Built with Play framework backend in Java and React with TypeScript frontend.
 
