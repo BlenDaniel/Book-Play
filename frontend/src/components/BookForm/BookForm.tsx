@@ -29,8 +29,14 @@ const BookForm = () => {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
-    if (id && !booksLoading) {
-      const book = books.find((b) => b.id === id);
+    if (id) {
+      const book = books.find((b) => 
+        String(b.id) === String(id) || b.isbn === id
+      );
+
+      console.log('Looking for book with id:', id);
+      console.log('Available books:', books);
+      console.log('Found book:', book);
       if (book) {
         const { id: _, ...bookData } = book;
         setFormData(bookData);
@@ -38,7 +44,7 @@ const BookForm = () => {
         setTouched({});
         setErrors({});
       }
-    } else if (!id) {
+    } else {
       // Reset form when switching from edit to add mode
       setFormData({
         isbn: "",
