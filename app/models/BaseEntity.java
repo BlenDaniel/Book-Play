@@ -1,3 +1,5 @@
+package models;
+
 import javax.persistence.*;
 import java.time.Instant;
 
