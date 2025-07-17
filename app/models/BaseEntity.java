@@ -1,24 +1,29 @@
-import io.ebean.Model;
-import io.ebean.annotation.CreatedTimestamp;
-import io.ebean.annotation.UpdatedTimestamp;
-import io.ebean.annotation.WhenCreated;
-import io.ebean.annotation.WhenModified;
-
 import javax.persistence.*;
 import java.time.Instant;
 
 @MappedSuperclass
-public abstract class BaseEntity extends Model {
+public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @WhenCreated
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @WhenModified
+    @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;

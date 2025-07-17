@@ -1,34 +1,45 @@
-import play.ApplicationLoader;
-import play.Environment;
-import play.inject.guice.GuiceApplicationBuilder;
-import play.inject.guice.GuiceApplicationLoader;
+import play.inject.ApplicationLifecycle;
+import play.db.jpa.JPAApi;
+import play.db.jpa.Transactional;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import java.util.concurrent.CompletableFuture;
 
 @Singleton
-public class Bootstrap extends GuiceApplicationLoader {
+public class Bootstrap {
 
-    @Override
-    public GuiceApplicationBuilder builder(ApplicationLoader.Context context) {
-        return initialBuilder(context)
-            .overrides(overrides(context));
-    }
+    private final JPAApi jpaApi;
 
     @Inject
-    public Bootstrap(Environment environment) {
+    public Bootstrap(ApplicationLifecycle lifecycle, JPAApi jpaApi) {
+        this.jpaApi = jpaApi;
+        
         // Initialize database with sample data when application starts
         initializeDatabase();
+        
+        // Clean up on shutdown
+        lifecycle.addStopHook(() -> {
+            return CompletableFuture.completedFuture(null);
+        });
     }
 
-    private void initializeDatabase() {
+    @Transactional
+    public void initializeDatabase() {
+        EntityManager em = jpaApi.em();
+        
         // Check if books already exist to avoid duplicate data
-        if (Book.find.all().isEmpty()) {
-            createSampleBooks();
+        TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(b) FROM Book b", Long.class);
+        Long bookCount = countQuery.getSingleResult();
+        
+        if (bookCount == 0) {
+            createSampleBooks(em);
         }
     }
 
-    private void createSampleBooks() {
+    private void createSampleBooks(EntityManager em) {
         // Sample data from the design
         Book[] sampleBooks = {
             new Book("9780300267662", "Why Architecture Matters", 
@@ -48,7 +59,7 @@ public class Bootstrap extends GuiceApplicationLoader {
         };
 
         for (Book book : sampleBooks) {
-            book.save();
+            em.persist(book);
         }
         
         System.out.println("Database initialized with " + sampleBooks.length + " sample books");
