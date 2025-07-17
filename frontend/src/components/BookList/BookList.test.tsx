@@ -70,13 +70,13 @@ describe('BookList Component', () => {
     expect(screen.getByText('Test Book 1')).toBeInTheDocument();
     expect(screen.getByText('Subtitle 1')).toBeInTheDocument();
     expect(screen.getByText('2022')).toBeInTheDocument();
-    expect(screen.getByText('PENDING')).toBeInTheDocument();
+    expect(screen.getByText('Pending')).toBeInTheDocument();
 
     expect(screen.getByText('978-0-987654-32-1')).toBeInTheDocument();
     expect(screen.getByText('Test Book 2')).toBeInTheDocument();
     expect(screen.getByText('Subtitle 2')).toBeInTheDocument();
     expect(screen.getByText('2023')).toBeInTheDocument();
-    expect(screen.getByText('APPROVED')).toBeInTheDocument();
+    expect(screen.getByText('Approved')).toBeInTheDocument();
   });
 
   it('renders search input and buttons', () => {
