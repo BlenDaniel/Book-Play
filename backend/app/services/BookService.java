@@ -2,11 +2,13 @@
 
 package services;
 
+import com.google.inject.ImplementedBy;
 import java.util.List;
 import models.dto.BookDto;
 import models.request.BookCreateRequest;
 import models.request.BookUpdateRequest;
 
+@ImplementedBy(BookServiceImpl.class)
 public interface BookService {
 
     BookDto create(BookCreateRequest request);

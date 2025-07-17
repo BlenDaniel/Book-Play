@@ -55,12 +55,17 @@ public class BookServiceImpl implements BookService {
         return jpaApi.withTransaction(em -> {
             play.Logger.info("Fetching book with id: {}", id);
             
-            Book book = em.find(Book.class, id);
-            if (book == null) {
-                throw new BookNotFoundException("Book not found");
+            try {
+                Long bookId = Long.valueOf(id);
+                Book book = em.find(Book.class, bookId);
+                if (book == null) {
+                    throw new BookNotFoundException("Book not found");
+                }
+                
+                return toDto(book);
+            } catch (NumberFormatException e) {
+                throw new BookInvalidRequestException("Invalid book ID format");
             }
-            
-            return toDto(book);
         });
     }
 
@@ -83,25 +88,30 @@ public class BookServiceImpl implements BookService {
         return jpaApi.withTransaction(em -> {
             play.Logger.info("Updating book with id: {}", request.getId());
             
-            Book book = em.find(Book.class, request.getId());
-            if (book == null) {
-                throw new BookNotFoundException("Book not found with id: " + request.getId());
+            try {
+                Long bookId = Long.valueOf(request.getId());
+                Book book = em.find(Book.class, bookId);
+                if (book == null) {
+                    throw new BookNotFoundException("Book not found with id: " + request.getId());
+                }
+                
+                if (request.getIsbn() != null) book.setIsbn(request.getIsbn());
+                if (request.getTitle() != null) book.setTitle(request.getTitle());
+                if (request.getSubtitle() != null) book.setSubtitle(request.getSubtitle());
+                if (request.getStatus() != null) book.setStatus(Book.BookStatus.valueOf(request.getStatus().toUpperCase()));
+                
+                if (request.getCopyrightYear() != null) {
+                    book.setCopyrightYear(request.getCopyrightYear());
+                }
+                
+                em.merge(book);
+                em.flush();
+                
+                play.Logger.info("Successfully updated book with id: {}", book.getId());
+                return toDto(book);
+            } catch (NumberFormatException e) {
+                throw new BookInvalidRequestException("Invalid book ID format");
             }
-            
-            if (request.getIsbn() != null) book.setIsbn(request.getIsbn());
-            if (request.getTitle() != null) book.setTitle(request.getTitle());
-            if (request.getSubtitle() != null) book.setSubtitle(request.getSubtitle());
-            if (request.getStatus() != null) book.setStatus(Book.BookStatus.valueOf(request.getStatus().toUpperCase()));
-            
-            if (request.getCopyrightYear() != null) {
-                book.setCopyrightYear(request.getCopyrightYear());
-            }
-            
-            em.merge(book);
-            em.flush();
-            
-            play.Logger.info("Successfully updated book with id: {}", book.getId());
-            return toDto(book);
         });
     }
 
@@ -110,16 +120,21 @@ public class BookServiceImpl implements BookService {
         jpaApi.withTransaction(em -> {
             play.Logger.info("Deleting book with id: {}", id);
             
-            Book book = em.find(Book.class, id);
-            if (book == null) {
-                throw new BookNotFoundException("Book not found with id: " + id);
+            try {
+                Long bookId = Long.valueOf(id);
+                Book book = em.find(Book.class, bookId);
+                if (book == null) {
+                    throw new BookNotFoundException("Book not found with id: " + id);
+                }
+                
+                em.remove(book);
+                em.flush();
+                
+                play.Logger.info("Successfully deleted book with id: {}", id);
+                return null;
+            } catch (NumberFormatException e) {
+                throw new BookInvalidRequestException("Invalid book ID format");
             }
-            
-            em.remove(book);
-            em.flush();
-            
-            play.Logger.info("Successfully deleted book with id: {}", id);
-            return null;
         });
     }
 
