@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { type AppDispatch, type RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { type AppDispatch } from "../../store/store";
 import { BookStatus, type BookFormData } from "../../types/book";
 import { updateBook, addBook } from "../../store/bookSlice";
 import { validateBook } from "../../utils/validation";
+import { useBooks } from "../../hooks/useBooks";
 import * as api from "../../services/api";
 import styles from "./BookForm.module.css";
 
@@ -12,7 +13,7 @@ const BookForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { books } = useSelector((state: RootState) => state.books);
+  const { books, loading: booksLoading } = useBooks();
 
   const [formData, setFormData] = useState<BookFormData>({
     isbn: "",
@@ -28,7 +29,7 @@ const BookForm = () => {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   useEffect(() => {
-    if (id) {
+    if (id && !booksLoading) {
       const book = books.find((b) => b.id === id);
       if (book) {
         const { id: _, ...bookData } = book;
@@ -37,7 +38,7 @@ const BookForm = () => {
         setTouched({});
         setErrors({});
       }
-    } else {
+    } else if (!id) {
       // Reset form when switching from edit to add mode
       setFormData({
         isbn: "",
@@ -49,7 +50,7 @@ const BookForm = () => {
       setTouched({});
       setErrors({});
     }
-  }, [id, books]);
+  }, [id, books, booksLoading]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -133,6 +134,11 @@ const BookForm = () => {
       ? styles.errorInput
       : "";
   };
+
+  // Show loading state while books are being fetched for edit mode
+  if (id && booksLoading) {
+    return <div>Loading book data...</div>;
+  }
 
   return (
     <div className={styles.container}>
