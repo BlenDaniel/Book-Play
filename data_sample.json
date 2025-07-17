@@ -1,0 +1,10 @@
+{
+  "books": [
+    { "isbn": "9780300267662", "title": "Why Architecture Matters", "subtitle": "A classic work on the joy of experiencing architecture", "copyrightYear": "2023", "status": "approved" },
+    { "isbn": "978-31-10914-67-5", "title": "The Death Penalty", "subtitle": "", "copyrightYear": "2026", "status": "pending" },
+    { "isbn": "9783110545982", "title": "Qualitative Interviews", "subtitle": "", "copyrightYear": "2025", "status": "rejected" },
+    { "isbn": "978-05-20392-30-4", "title": "Equality within Our Lifetimes", "subtitle": "A free ebook version of this title is available through Luminos", "copyrightYear": "2000", "status": "approved" },
+    { "isbn": "9780520392314", "title": "A General Theory of Crime", "subtitle": "", "copyrightYear": "2022", "status": "approved" },
+    { "isbn": "9780300268478", "title": "The Great New York Fire of 1776", "subtitle": "Who set the mysterious fire", "copyrightYear": "2010", "status": "approved" }
+  ]
+}
