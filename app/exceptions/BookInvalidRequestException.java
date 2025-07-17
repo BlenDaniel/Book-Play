@@ -1,3 +1,6 @@
+
+package exceptions;
+
 public class BookInvalidRequestException extends RuntimeException {
     
     public BookInvalidRequestException(String message) {

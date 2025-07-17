@@ -1,4 +1,9 @@
+
+package models.request;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import models.Book;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 

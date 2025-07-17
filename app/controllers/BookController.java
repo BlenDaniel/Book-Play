@@ -1,3 +1,7 @@
+
+
+package controllers;
+
 import play.mvc.*;
 import play.libs.Json;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -6,6 +10,14 @@ import javax.inject.Singleton;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import services.BookService;
+import models.dto.BookDto;
+import models.request.BookCreateRequest;
+import models.request.BookUpdateRequest;
+import exceptions.BookNotFoundException;
+import exceptions.BookInvalidRequestException;
+import utils.ApiResponse;
+
 
 @Singleton
 public class BookController extends Controller {
@@ -22,17 +34,17 @@ public class BookController extends Controller {
             try {
                 JsonNode json = request.body().asJson();
                 if (json == null) {
-                    return badRequest(Json.toJson(ApiResponse.error("Invalid JSON data")));
+                    return Results.badRequest(Json.toJson(ApiResponse.error("Invalid JSON data")));
                 }
 
                 BookCreateRequest createRequest = Json.fromJson(json, BookCreateRequest.class);
                 BookDto bookDto = bookService.create(createRequest);
                 
-                return ok(Json.toJson(ApiResponse.success(bookDto)));
+                return Results.ok(Json.toJson(ApiResponse.success(bookDto)));
             } catch (BookInvalidRequestException e) {
-                return badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to create book")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to create book")));
             }
         });
     }
@@ -45,13 +57,13 @@ public class BookController extends Controller {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 BookDto bookDto = bookService.getOne(id);
-                return ok(Json.toJson(ApiResponse.success(bookDto)));
+                return Results.ok(Json.toJson(ApiResponse.success(bookDto)));
             } catch (BookNotFoundException e) {
-                return notFound(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.notFound(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (BookInvalidRequestException e) {
-                return badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to get book")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to get book")));
             }
         });
     }
@@ -64,9 +76,9 @@ public class BookController extends Controller {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 List<BookDto> books = bookService.getAll();
-                return ok(Json.toJson(ApiResponse.success(books)));
+                return Results.ok(Json.toJson(ApiResponse.success(books)));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to get books")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to get books")));
             }
         });
     }
@@ -80,19 +92,19 @@ public class BookController extends Controller {
             try {
                 JsonNode json = request.body().asJson();
                 if (json == null) {
-                    return badRequest(Json.toJson(ApiResponse.error("Invalid JSON data")));
+                    return Results.badRequest(Json.toJson(ApiResponse.error("Invalid JSON data")));
                 }
 
                 BookUpdateRequest updateRequest = Json.fromJson(json, BookUpdateRequest.class);
                 BookDto bookDto = bookService.update(updateRequest);
                 
-                return ok(Json.toJson(ApiResponse.success(bookDto)));
+                return Results.ok(Json.toJson(ApiResponse.success(bookDto)));
             } catch (BookNotFoundException e) {
-                return notFound(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.notFound(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (BookInvalidRequestException e) {
-                return badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to update book")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to update book")));
             }
         });
     }
@@ -105,13 +117,13 @@ public class BookController extends Controller {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 bookService.delete(id);
-                return ok(Json.toJson(ApiResponse.success("Book deleted successfully")));
+                return Results.ok(Json.toJson(ApiResponse.success("Book deleted successfully")));
             } catch (BookNotFoundException e) {
-                return notFound(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.notFound(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (BookInvalidRequestException e) {
-                return badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
+                return Results.badRequest(Json.toJson(ApiResponse.error(e.getMessage())));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to delete book")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to delete book")));
             }
         });
     }
@@ -125,13 +137,13 @@ public class BookController extends Controller {
             try {
                 String query = request.getQueryString("query");
                 if (query == null || query.trim().isEmpty()) {
-                    return badRequest(Json.toJson(ApiResponse.error("Query parameter is required")));
+                    return Results.badRequest(Json.toJson(ApiResponse.error("Query parameter is required")));
                 }
 
                 List<BookDto> books = bookService.search(query);
-                return ok(Json.toJson(ApiResponse.success(books)));
+                return Results.ok(Json.toJson(ApiResponse.success(books)));
             } catch (Exception e) {
-                return internalServerError(Json.toJson(ApiResponse.error("Failed to search books")));
+                return Results.internalServerError(Json.toJson(ApiResponse.error("Failed to search books")));
             }
         });
     }

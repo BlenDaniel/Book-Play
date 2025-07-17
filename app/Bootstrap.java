@@ -1,12 +1,13 @@
 import play.inject.ApplicationLifecycle;
 import play.db.jpa.JPAApi;
-import play.db.jpa.Transactional;
+
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.util.concurrent.CompletableFuture;
+import models.Book;
 
 @Singleton
 public class Bootstrap {
@@ -26,9 +27,8 @@ public class Bootstrap {
         });
     }
 
-    @Transactional
     public void initializeDatabase() {
-        EntityManager em = jpaApi.em();
+        EntityManager em = jpaApi.em("default");
         
         // Check if books already exist to avoid duplicate data
         TypedQuery<Long> countQuery = em.createQuery("SELECT COUNT(b) FROM Book b", Long.class);
