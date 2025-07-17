@@ -9,10 +9,8 @@ export const addBook = async (book: BookFormData): Promise<Book> => {
   return response.data.data;
 };
 
-export const fetchBookById = async (id: string): Promise<Book[]> => {
-  const response = await axios.get<ApiResponse<Book[]>>(
-    `${API_BASE_URL}/${id}`
-  );
+export const fetchBookById = async (id: string): Promise<Book> => {
+  const response = await axios.get<ApiResponse<Book>>(`${API_BASE_URL}/${id}`);
   return response.data.data;
 };
 
